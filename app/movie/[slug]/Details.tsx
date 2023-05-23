@@ -19,8 +19,10 @@ const Details = ({ detailsLoading, details }: Props) => {
               className="mx-auto flex-shrink-0"
               src={`https://image.tmdb.org/t/p/w500${details.poster_path}`}
               fill={true}
-              sizes="(max-width: 768px) 500px, (max-width: 1200px) 500px"
-              alt=""
+              sizes="400px, (min-width: 1200px) 500px"
+              alt={details.title}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP0qgcAARkAyycXbZ8AAAAASUVORK5CYII="
             />
           </div>
           <div className="p-2 lg:p-8">

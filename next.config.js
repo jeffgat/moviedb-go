@@ -1,5 +1,7 @@
+const { withPlaiceholder } = require('@plaiceholder/next');
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = withPlaiceholder({
   images: {
     remotePatterns: [
       {
@@ -10,6 +12,5 @@ const nextConfig = {
       }
     ]
   }
-};
-
-module.exports = nextConfig;
+  // your Next.js config
+});

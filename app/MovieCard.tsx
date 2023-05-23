@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { animate, motion } from 'framer-motion';
+import { getPlaiceholder } from 'plaiceholder';
 
 type Props = {
   movie: any;
@@ -39,9 +40,11 @@ const MovieCard = ({ movie, index }: Props) => {
               className="mx-auto flex-shrink-0"
               // refactor out base url
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP0qgcAARkAyycXbZ8AAAAASUVORK5CYII="
               fill={true}
-              sizes="(max-width: 768px) 500px, (max-width: 1200px) 500px"
-              alt=""
+              sizes="400px, (min-width: 1200px) 500px"
+              alt={movie.title}
             />
           </div>
           <div className="flex items-center justify-center p-4 w-full">
