@@ -1,17 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
+import { motion } from 'framer-motion';
+import useSWR from 'swr';
 import SearchBar from './SearchBar';
 import MovieCard from './MovieCard';
-import useSWR from 'swr';
 import { fetchWithToken } from '@/utils/fetchers';
 import { Spinner } from '@/components';
-import { motion } from 'framer-motion';
+import { moviesAtom } from '@/atoms/movieAtom';
 
 export default function Home() {
   const FETCH_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/trending/movie/day?language=en-US?api_key=${process.env.NEXT_PUBLIC_API_KEY}`;
   const TOKEN = process.env.NEXT_PUBLIC_ACCESS_TOKEN || '';
 
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useAtom(moviesAtom);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const { data, error, isLoading } = useSWR([FETCH_URL, TOKEN], ([url, token]) =>
