@@ -79,7 +79,7 @@ export default function Home() {
       <SearchBar searchQuery={searchQuery} onChange={handleSearchInput} />
       <ul
         role="list"
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full"
       >
         {isLoading ? (
           <div className="col-span-5 mt-40">
