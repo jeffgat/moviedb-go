@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React from 'react';
 
 type SearchProps = {
@@ -6,9 +7,13 @@ type SearchProps = {
 };
 
 const SearchBar = ({ searchQuery, onChange }: SearchProps) => {
-    
   return (
-    <div className="w-1/2 mb-8">
+    <motion.div
+      className="w-full lg:w-1/2 mb-8"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <label htmlFor="search" className="sr-only" />
       <input
         type="text"
@@ -19,7 +24,7 @@ const SearchBar = ({ searchQuery, onChange }: SearchProps) => {
         value={searchQuery}
         onChange={onChange}
       />
-    </div>
+    </motion.div>
   );
 };
 

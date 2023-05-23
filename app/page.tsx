@@ -1,10 +1,11 @@
 'use client';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
 import MovieCard from './MovieCard';
 import useSWR from 'swr';
 import { fetchWithToken } from '@/utils/fetchers';
+import { Spinner } from '@/components';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const FETCH_URL = `${process.env.NEXT_PUBLIC_BASE_URL}/trending/movie/day?language=en-US?api_key=${process.env.NEXT_PUBLIC_API_KEY}`;
@@ -19,17 +20,18 @@ export default function Home() {
 
   useEffect(() => {
     if (!data) return;
+    // init movie state
     setMovies(data.results);
     setFilteredMovies(data.results);
   }, [data]);
 
-  // todo - this sets filteredMovies back to [] when you go back, needs to be sorted
   useEffect(() => {
-    // could pass search query into the api call
+    // would likely pass the search query to the search api and throttle or debounce the api call in production
     // https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1
     const filtered = movies.filter((movie: any) =>
       movie.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    // use original movies state if no search query
     searchQuery === '' ? setFilteredMovies(movies) : setFilteredMovies(filtered);
   }, [searchQuery, movies]);
 
@@ -37,26 +39,57 @@ export default function Home() {
     setSearchQuery(e.target.value);
   };
 
-  if (isLoading) {
-    return <div>Loading..</div>;
+  if (error) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+        <h1 className="text-4xl font-bold mb-8 text-center">
+          Sorry, something went wrong with the request.
+          <br />
+          Please try again later.
+        </h1>
+        <p>Error: {error.status_message}</p>
+      </main>
+    );
   }
 
-  if (isLoading === false && !data) {
-    return <div>Movies could not be fetched. Please try again later.</div>;
+  if (!isLoading && !data) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+        <h1 className="text-4xl font-bold mb-8 text-center">
+          Sorry, movies could not be fetched.
+          <br />
+          Please try again later.
+        </h1>
+      </main>
+    );
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      <h1 className="text-4xl font-bold mb-8">Movie DB</h1>
+    <main className="flex min-h-screen flex-col items-center p-4 sm:p-12 md:p-24">
+      <motion.h1
+        className="text-4xl font-bold mb-8"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        Movie DB
+      </motion.h1>
       <SearchBar searchQuery={searchQuery} onChange={handleSearchInput} />
-      {/* grid to be fixed */}
       <ul
         role="list"
-        className="grid grid-cols-1 auto-cols-min gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       >
-        {filteredMovies.map((movie: any, idx: number) => (
-          <MovieCard movie={movie} index={idx} key={movie.id} />
-        ))}
+        {isLoading ? (
+          <div className="col-span-5 mt-40">
+            <Spinner />
+          </div>
+        ) : (
+          <>
+            {filteredMovies.map((movie: any, idx: number) => (
+              <MovieCard movie={movie} index={idx} key={movie.id} />
+            ))}
+          </>
+        )}
       </ul>
     </main>
   );

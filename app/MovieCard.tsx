@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { animate, motion } from 'framer-motion';
 
 type Props = {
-  movie: any; // todo -type
+  movie: any;
   index: number;
 };
 
 const MovieCard = ({ movie, index }: Props) => {
   return (
-    <li
+    <motion.li
       key={movie.id}
-      className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-md overflow-hidden bg-neutral-800 text-center shadow hover:opacity-70 transition-all"
+      className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-md overflow-hidden bg-neutral-800 text-center shadow hover:opacity-70"
+      initial={{ opacity: 0, y: 20, filter: 'blur(2px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 0.2 }}
+      whileHover={{ scale: 1.015, y: -2, opacity: 0.6 }}
     >
       <Link href={`/movie/${movie.id}`}>
         <div className="flex flex-1 flex-col">
@@ -29,7 +34,6 @@ const MovieCard = ({ movie, index }: Props) => {
             </div>
           </div>
           <div className="aspect-[3/4] w-15 relative">
-            {/* todo - loading states/skeletons for these */}
             <Image
               priority={index < 8}
               className="mx-auto flex-shrink-0"
@@ -40,12 +44,12 @@ const MovieCard = ({ movie, index }: Props) => {
               alt=""
             />
           </div>
-          <div className="flex items-center justify-center flex-1 p-4 w-full">
+          <div className="flex items-center justify-center p-4 w-full">
             <h3 className="font-bold text-neutral-50">{movie.title}</h3>
           </div>
         </div>
       </Link>
-    </li>
+    </motion.li>
   );
 };
 
